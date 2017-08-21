@@ -51,7 +51,8 @@ def get_bucket(
 
 def destination_path(s3_base_path, file_path, compressed=True):
     suffix = compressed and '.lzo' or ''
-    return '/'.join([s3_base_path, file_path + suffix])
+    dest_path = "{}{}{}".format(s3_base_path, file_path, suffix)
+    return dest_path
 
 
 def s3_progress_update_callback(*args):
@@ -194,7 +195,8 @@ def create_upload_manifest(
         keyspace_globs = ['*']
 
     if snapshot_table:
-        table_glob = snapshot_table
+        # '-' is here to avoid substring matching but it breaks < C*2.1 compatibility
+        table_glob = '%s-*' % snapshot_table
     else:
         table_glob = '*'
 
