@@ -194,7 +194,8 @@ def create_upload_manifest(
         keyspace_globs = ['*']
 
     if snapshot_table:
-        table_glob = snapshot_table
+        # '-' is here to avoid substring matching but it breaks < C*2.1 compatibility
+        table_glob = '%s-*' % snapshot_table
     else:
         table_glob = '*'
 
